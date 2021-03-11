@@ -48,3 +48,5 @@ Deep object cosegmentation takes two images and finds the common features, would
 * Datasets:
     * [FlikrLogos](https://www.uni-augsburg.de/en/fakultaet/fai/informatik/prof/mmc/research/datensatze/flickrlogos/) Have to send email to get dataset ✔
     * [BelgaLogos](http://www-sop.inria.fr/members/Alexis.Joly/BelgaLogos/BelgaLogos.html#download)
+
+* A [mobile first version](https://github.com/facebookresearch/d2go) of Detectron2 which is light weight
