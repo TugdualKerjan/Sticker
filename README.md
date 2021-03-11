@@ -16,6 +16,7 @@
 
 * [Paperswithcode](https://paperswithcode.com/task/few-shot-object-detection) has an excellent database of possible reseach papers with implementations.
 
+---
 
 ## Week 2
 
@@ -35,7 +36,13 @@ Deep object cosegmentation takes two images and finds the common features, would
     * [Amazing blog post on the implementation of Mask R-CNN](https://engineering.matterport.com/splash-of-color-instance-segmentation-with-mask-r-cnn-and-tensorflow-7c761e238b46)
     * [Implementation of Mask R-CNN](https://github.com/matterport/Mask_RCNN) Sadly uses tensowflow
 
+---
+
 ## Week 3
+
+Installed Detectron2 in myenv environment, with PyTorch 1.7.1 and TorchVision 0.8.2, CPU version. Would like to connect to SCITAS and use that instead.
+
+D2Go is interesting optimised version of Detectron2 but for mobile phones, gotta check it out.
 
 * [Fantastic intro to detectron2](https://www.youtube.com/watch?v=EVtMT6Ve0sY)
 
@@ -50,3 +57,48 @@ Deep object cosegmentation takes two images and finds the common features, would
     * [BelgaLogos](http://www-sop.inria.fr/members/Alexis.Joly/BelgaLogos/BelgaLogos.html#download)
 
 * A [mobile first version](https://github.com/facebookresearch/d2go) of Detectron2 which is light weight
+
+### How to run detecton2 demo:
+
+<details close>
+<summary></summary>
+
+- Install packages from [here](https://github.com/facebookresearch/detectron2/blob/master/INSTALL.md)
+
+- Run after pulling the git
+
+```terminal
+git clone https://github.com/facebookresearch/detectron2.git
+cd demo
+python demo.py --config-file ../configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml --input ../../input.jpg --opts MODEL.DEVICE cpu MODEL.WEIGHTS detectron2://COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x/137849600/model_final_f10217.pkl
+```
+</details>
+
+
+### Issues I ran into:
+<details close>
+<summary></summary>
+- Had to add MODEL.DEVICE cpu for it to run on CPU
+
+- Had to point to a downloaded image
+```
+wget http://images.cocodataset.org/val2017/000000439715.jpg -q -O input.jpg
+```
+
+- Had to install two libraries for OpenCV
+```
+sudo apt install libgtk2.0-dev pkg-config
+```
+</details>
+
+### What I learned
+
+- How to do Markdown
+- Why and how of Conda environments
+- How to use detectron pretrained models
+
+- Names of the pretrained
+
+    - R50, R101 is [MSRA Residual Network](https://github.com/KaimingHe/deep-residual-networks)
+    - X101 is ResNeXt
+    - Use 3x as it is more trained than 1x
