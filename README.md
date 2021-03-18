@@ -4,7 +4,7 @@
 
 ---
 
-## Week 1
+## Week 1 :
 
 * Learning how to read scientific papers, took a look at [Frustratingly Simple Few-Shot Object Detection](https://arxiv.org/pdf/2003.06957v1.pdf) 
     * The abstract of scientific papers usually states the simple but obvious
@@ -87,7 +87,7 @@ wget http://images.cocodataset.org/val2017/000000439715.jpg -q -O input.jpg
 
 - Had to install two libraries for OpenCV
 ```
-sudo apt install libgtk2.0-dev pkg-config
+pip install opencv
 ```
 </details>
 
@@ -102,3 +102,61 @@ sudo apt install libgtk2.0-dev pkg-config
     - R50, R101 is [MSRA Residual Network](https://github.com/KaimingHe/deep-residual-networks)
     - X101 is ResNeXt
     - Use 3x as it is more trained than 1x
+
+---
+
+## Week 4
+
+Managed to ssh into SCITAS, spent some time understanding how to access CUDA, got it to run!
+
+Downloaded the FlickrLogo dataset [Links](PRIVATE.md)!
+
+Wrote a simple [script](execute.sh) that will execute as a job using Slurm, made a venv with these packages added user for it to not be system installed:
+
+```terminal
+pip install detectron2 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu102/torch1.7/index.html --user
+pip install torch==1.7.1 torchvision==0.8.2 --user
+pip install opencv-python --user
+pip install -U iopath==0.1.4 --user
+```
+
+To interact with SCITAS *and* have it on the GPUs
+
+```terminal
+Sinteract -t 00:10:00 -p gpu -q gpu_free -g gpu:1
+```
+
+### Issues I ran into:
+<details close>
+<summary></summary>
+
+- Have to load python after the venv as venv replaces the python version
+
+- Have to install opencv-python everytime even I'm in the venv?
+```terminal
+pip install opencv-python --user
+```
+- Had to downgrade iopath for it to work on SCITAS
+```
+pip install -U iopath==0.1.4 --user
+```
+</details>
+
+
+### What I learned:
+
+- How to use SCITAS again :P
+
+- How to use scp and send the images back to my local machine
+
+- How to launch jobs instead of using Sinteract
+
+- What Python notebooks were and there use using the [detectron2 tutorial](https://colab.research.google.com/drive/16jcaJoc6bCFAQ96jDe2HwtXj7BMD_-m5#scrollTo=8IRGo8d0qkgR)
+
+---
+
+## Week 5
+
+- Custom dataset: https://github.com/facebookresearch/detectron2/blob/master/docs/tutorials/datasets.md
+
+- How to get the masks etc for the sticker thing
