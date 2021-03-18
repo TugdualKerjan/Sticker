@@ -157,6 +157,58 @@ pip install -U iopath==0.1.4 --user
 
 ## Week 5
 
-- Custom dataset: https://github.com/facebookresearch/detectron2/blob/master/docs/tutorials/datasets.md
+Trained detectron2 on FlikrLogos32, which has 32 classes, each a company.
 
-- How to get the masks etc for the sticker thing
+Detectron needs me to register a function that will return a list\[`dict`\] where the `dict` holds information about 1 specific image
+
+<details close>
+<summary>Fields required for segmentation</summary>
+
+Items like `file_name`, `height`, `width`, `image_id` can be given by
+
+```python
+record = {}
+
+filename = os.path.join(img_dir, v["filename"])
+height, width = cv2.imread(filename).shape[:2]
+
+record["file_name"] = filename
+record["image_id"] = idx
+record["height"] = height
+record["width"] = width
+```
+
+#### Since we are doing image segmentation
+
+`annotations`, a list\[`dict`\] which contains `bbox`, `bbox_mode`, `category_id` and `segmentation` can be given by
+
+```python
+annos = v["regions"]
+objs = []
+for _, anno in annos.items():
+    assert not anno["region_attributes"]
+    anno = anno["shape_attributes"]
+    px = anno["all_points_x"]
+    py = anno["all_points_y"]
+    poly = [(x + 0.5, y + 0.5) for x, y in zip(px, py)]
+    poly = [p for x in poly for p in x]
+
+    obj = {
+        "bbox": [np.min(px), np.min(py), np.max(px), np.max(py)],
+        "bbox_mode": BoxMode.XYXY_ABS,
+        "segmentation": [poly],
+        "category_id": 0,
+    }
+    objs.append(obj)
+record["annotations"] = objs
+```
+
+</details>
+
+### What I learned:
+
+- The inner structure of detectron2, python (again)
+
+- How to use `rsync`
+
+- 

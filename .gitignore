@@ -1,2 +1,5 @@
 detectron2/**
 PRIVATE.md
+Flick/**
+.vscode
+scitas/**
