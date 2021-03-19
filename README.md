@@ -161,6 +161,10 @@ Trained detectron2 on FlickrLogos32, which has 32 classes, each a company.
 
 Detectron needs me to register a function that will return a list\[`dict`\] where the `dict` holds information about 1 specific image, then to register it into the datasets, which can then be passed to the __dataloader__ which will augment, batch and give to `model.forward()`
 
+After making my custom dataset and running it on SCITAS, it took around ~3h to get _some_ sort of result, obtaining 3-4% on random parts of the picture by running it through the detectron2 Visualiser class. I tried using multiple different backbones, from C4, DC5, FPN and 3x or 1x to see if it would make a difference. 
+
+Loss was at around 0.2 after ~15 minutes of training for an abysmal result. Results were slightly better for the classes version
+
 https://detectron2.readthedocs.io/en/latest/tutorials/data_loading.html
 
 <details close>
@@ -214,6 +218,10 @@ record["annotations"] = objs
 - How to correctly open pictures (Had an annoying "\n" that was invisible in print() but not when passing as a path to open the image)
 
 - How to correctly pass the mask (Have to transform it into __RLE__ which is lightweight binary mask)
+
+- That I have to load the config of the model with my custom one
+
+- Too much memory use for the C4 models
 
 </details>
 
