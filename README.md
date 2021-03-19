@@ -157,9 +157,11 @@ pip install -U iopath==0.1.4 --user
 
 ## Week 5
 
-Trained detectron2 on FlikrLogos32, which has 32 classes, each a company.
+Trained detectron2 on FlickrLogos32, which has 32 classes, each a company.
 
-Detectron needs me to register a function that will return a list\[`dict`\] where the `dict` holds information about 1 specific image
+Detectron needs me to register a function that will return a list\[`dict`\] where the `dict` holds information about 1 specific image, then to register it into the datasets, which can then be passed to the __dataloader__ which will augment, batch and give to `model.forward()`
+
+https://detectron2.readthedocs.io/en/latest/tutorials/data_loading.html
 
 <details close>
 <summary>Fields required for segmentation</summary>
@@ -205,10 +207,28 @@ record["annotations"] = objs
 
 </details>
 
+### Issues I ran into:
+<details close>
+<summary></summary>
+
+- How to correctly open pictures (Had an annoying "\n" that was invisible in print() but not when passing as a path to open the image)
+
+- How to correctly pass the mask (Have to transform it into __RLE__ which is lightweight binary mask)
+
+</details>
+
 ### What I learned:
 
 - The inner structure of detectron2, python (again)
 
 - How to use `rsync`
 
-- 
+- P a t i e n c e :stars:
+
+
+# Works to cite:
+
+Scalable Logo Recognition in Real-World Images
+Stefan Romberg, Lluis Garcia Pueyo, Rainer Lienhart, Roelof van Zwol
+ACM International Conference on Multimedia Retrieval 2011 (ICMR11), Trento, April 2011. 
+

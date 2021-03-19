@@ -40,7 +40,3 @@ for x in range(0,len(outputs["instances"].pred_masks)):
   result = im * masktemp[..., None]
   result = result[boxtemp[1]:boxtemp[3],boxtemp[0]:boxtemp[2]]
   cv2.imwrite("output/output%s.jpg" % str(x), result)
-  
-# v = Visualizer(im[:, :, ::-1], MetadataCatalog.get(cfg.DATASETS.TRAIN[0]), scale=1)
-# out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-# cv2.imwrite("output.jpg", out.get_image()[:, :, ::-1])
