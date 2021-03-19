@@ -109,7 +109,7 @@ pip install opencv
 
 Managed to ssh into SCITAS, spent some time understanding how to access CUDA, got it to run!
 
-Downloaded the FlickrLogo dataset [Links](PRIVATE.md)!
+Downloaded the FlickrLogo dataset [Links](notes/PRIVATE.md)!
 
 Wrote a simple [script](execute.sh) that will execute as a job using Slurm, made a venv with these packages added user for it to not be system installed:
 
