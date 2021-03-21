@@ -86,37 +86,41 @@ cfg.merge_from_file(model_zoo.get_config_file(model))
 cfg.INPUT.MASK_FORMAT = 'bitmask'
 cfg.DATASETS.TRAIN = ("logo_train",) # Train with the logos dataset
 cfg.DATASETS.TEST = () # No test
-# cfg.MODEL.DEVICE = "cpu"
+cfg.MODEL.DEVICE = "cpu"
 cfg.DATALOADER.NUM_WORKERS = 2
 cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(model)  # Let training initialize from model zoo
-cfg.SOLVER.IMS_PER_BATCH = 1
+cfg.SOLVER.IMS_PER_BATCH = 8
 cfg.SOLVER.BASE_LR = 0.00035  # pick a good LR
-cfg.SOLVER.MAX_ITER = 800    # 300 iterations seems good enough for this toy dataset; you will need to train longer for a practical dataset
+cfg.SOLVER.MAX_ITER = 300    # 300 iterations seems good enough for this toy dataset; you will need to train longer for a practical dataset
 # cfg.SOLVER.STEPS = []        # do not decay learning rate
 cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128   # faster, and good enough for this toy dataset (default: 512)
 cfg.MODEL.ROI_HEADS.NUM_CLASSES = len(classes)  # only has one class (ballon). (see https://detectron2.readthedocs.io/tutorials/datasets.html#update-the-config-for-new-datasets)
-print(cfg.MODEL.ROI_HEADS.NUM_CLASSES)
+# print(cfg.MODEL.ROI_HEADS.NUM_CLASSES)
 # NOTE: this config means the number of classes, but a few popular unofficial tutorials incorrect uses num_classes+1 here.
 
-os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
-trainer = DefaultTrainer(cfg) 
-trainer.resume_or_load(resume=False)
-trainer.train()
+# os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
+# trainer = DefaultTrainer(cfg) 
+# trainer.resume_or_load(resume=False)
+# trainer.train()
 
 cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "model_final.pth")
-cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.03 
+cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.03
 cfg.DATASETS.TEST = ("logo_test", )
 predictor = DefaultPredictor(cfg)
 
 dataset_dicts = get_logos('Flick/FlickrLogos-v2/trainset.txt')
 
 for d in random.sample(dataset_dicts, 10):    
+    print(d["file_name"])
     im = cv2.imread(d["file_name"])
     outputs = predictor(im)
     v = Visualizer(im[:, :, ::-1],
                    metadata=logo_metadata, 
+                   scale=0.8, 
                    instance_mode=ColorMode.IMAGE_BW   # remove the colors of unsegmented pixels
     )
     out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-    cv2.imwrite("output/%s.jpg" % str(d["file_name"][-8:-5]), out.get_image()[:, :, ::-1])
+    cv2.imwrite("outputs/%s.jpg" % str(d["file_name"][-8:-5]), out.get_image()[:, :, ::-1])
+
+    # cv2.imwrite("output2/pred"+str(d["file_name"][-8:-5]), v.get_image()[:, :, ::-1])
     
