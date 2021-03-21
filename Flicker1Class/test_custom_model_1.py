@@ -18,7 +18,8 @@ from detectron2.structures import BoxMode
 from detectron2.engine import DefaultTrainer
 from detectron2.utils.visualizer import ColorMode
 
-path = "Flick/FlickrLogos-v2/"
+
+path = "../Flick/FlickrLogos-v2/"
 
 def get_logos(directory):
     dataset_dicts = []
@@ -46,7 +47,7 @@ def get_logos(directory):
             bbox = open(filepathmask+".bboxes.txt", "r").readlines()[1].split(" ")
 
             b_a = np.asarray(cv2.imread(filepathmask+".mask.0.png")[:, :, 0] == 255, dtype=bool, order='F') # Already in grayscale, change to binary
-
+            # Only one object per image for this one
             record["annotations"] = [{
                     "bbox": [int(x) for x in bbox],
                     "bbox_mode": BoxMode.XYWH_ABS,
@@ -57,28 +58,56 @@ def get_logos(directory):
         dataset_dicts.append(record)
     return dataset_dicts # Returns a dict of all images with their respective descriptions
 
+# DatasetCatalog.register("logo_test", lambda: get_logos(path + "testset.txt"))
+# dataset_dicts = DatasetCatalog.get("logo_test")
 
-for d in ["train", "test"]:
-    DatasetCatalog.register("logo_" + d, lambda d=d: get_logos(path + d + "set.txt"))
-    MetadataCatalog.get("logo_" + d).set(thing_classes=["logo"])
+MetadataCatalog.get("logo_test").set(thing_classes=["logo"])
+logo_metadata = MetadataCatalog.get("logo_test")
 
 model = "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"
 
 cfg = get_cfg()
 cfg.merge_from_file(model_zoo.get_config_file(model))
 cfg.INPUT.MASK_FORMAT = 'bitmask'
-cfg.DATASETS.TRAIN = ("logo_train",) # Train with the logos dataset
-cfg.DATASETS.TEST = () # Train with the logos dataset
-
-cfg.DATALOADER.NUM_WORKERS = 2
-cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(model)  # Let training initialize from model zoo
-cfg.SOLVER.IMS_PER_BATCH = 1
-cfg.SOLVER.BASE_LR = 0.001  # pick a good LR
-cfg.SOLVER.MAX_ITER = 4000
-# cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128   # faster, and good enough for this toy dataset (default: 512)
+cfg.MODEL.DEVICE = "cpu"
 cfg.MODEL.ROI_HEADS.NUM_CLASSES = 1  # only has one class (logo). (see https://detectron2.readthedocs.io/tutorials/datasets.html#update-the-config-for-new-datasets)
 
-os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
-trainer = DefaultTrainer(cfg) 
-trainer.resume_or_load(resume=False)
-trainer.train()
+cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "model_final.pth")
+cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.75
+cfg.DATASETS.TEST = ("logo_test", )
+predictor = DefaultPredictor(cfg)
+
+os.makedirs("guess", exist_ok=True)
+
+import glob
+for imageName in random.sample(glob.glob('../Flick/FlickrLogos-v2/classes/jpg/*/*.jpg'), 30):
+    im = cv2.imread(imageName)
+    outputs = predictor(im)
+    v = Visualizer(im[:, :, ::-1],
+                    metadata=logo_metadata, 
+                    )
+    out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
+    cv2.imwrite("guess/%s.jpg" % str(imageName[-8:-5]), out.get_image()[:, :, ::-1])
+
+# dataset_dicts = get_logos('../Flick/FlickrLogos-v2/testset.txt')
+
+# for d in random.sample(dataset_dicts, 10):    
+#     print(d["file_name"])
+#     im = cv2.imread(d["file_name"])
+#     outputs = predictor(im)
+#     v = Visualizer(im[:, :, ::-1],
+#                    metadata=logo_metadata, 
+#                    scale=0.8, 
+#                    instance_mode=ColorMode.IMAGE_BW   # remove the colors of unsegmented pixels
+#     )
+#     out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
+#     cv2.imwrite("guess/%s.jpg" % str(d["file_name"][-8:-5]), out.get_image()[:, :, ::-1])
+
+# cfg.DATASETS.TRAIN = ("logo_train",) # Train with the logos dataset
+# cfg.DATASETS.TEST = () # No test
+# cfg.DATALOADER.NUM_WORKERS = 2
+# cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(model)  # Let training initialize from model zoo
+# cfg.SOLVER.IMS_PER_BATCH = 8
+# cfg.SOLVER.BASE_LR = 0.02  # pick a good LR
+# cfg.SOLVER.MAX_ITER = 600    # 300 iterations seems good enough for this toy dataset; you will need to train longer for a practical dataset
+# cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128   # faster, and good enough for this toy dataset (default: 512)

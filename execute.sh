@@ -11,6 +11,9 @@
 # source venv-tensorflow-1.9/bin/activate
 # srun python your_input.py
 
+
+module load gcc/8.4.0-cuda cuda/10.2.89 && source sticker/env/bin/activate && module load python/3.7.7
+
 # Load the python
 module load gcc/8.4.0-cuda cuda/10.2.89
 # Open the venv

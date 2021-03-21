@@ -32,7 +32,6 @@ def get_logos(directory):
         imgname = imgname[:-1] #remove extra \n
         imgclass = imgclass.lower() #Lower case HP
         record = {}
-        print(imgname)
         
         filepath = os.path.join(path,"classes/jpg/",imgclass,imgname)
         height, width = cv2.imread(filepath).shape[:2]
@@ -85,38 +84,17 @@ cfg = get_cfg()
 cfg.merge_from_file(model_zoo.get_config_file(model))
 cfg.INPUT.MASK_FORMAT = 'bitmask'
 cfg.DATASETS.TRAIN = ("logo_train",) # Train with the logos dataset
-cfg.DATASETS.TEST = () # No test
-# cfg.MODEL.DEVICE = "cpu"
+cfg.DATASETS.TEST = () # Train with the logos dataset
+
 cfg.DATALOADER.NUM_WORKERS = 2
 cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(model)  # Let training initialize from model zoo
 cfg.SOLVER.IMS_PER_BATCH = 1
-cfg.SOLVER.BASE_LR = 0.02  # pick a good LR
-cfg.SOLVER.MAX_ITER = 900    # 300 iterations seems good enough for this toy dataset; you will need to train longer for a practical dataset
-# cfg.SOLVER.STEPS = []        # do not decay learning rate
-cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128   # faster, and good enough for this toy dataset (default: 512)
+cfg.SOLVER.BASE_LR = 0.005  # pick a good LR
+cfg.SOLVER.MAX_ITER = 2000
+# cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128   # faster, and good enough for this toy dataset (default: 512)
 cfg.MODEL.ROI_HEADS.NUM_CLASSES = len(classes)  # only has one class (ballon). (see https://detectron2.readthedocs.io/tutorials/datasets.html#update-the-config-for-new-datasets)
-print(cfg.MODEL.ROI_HEADS.NUM_CLASSES)
-# NOTE: this config means the number of classes, but a few popular unofficial tutorials incorrect uses num_classes+1 here.
 
 os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
 trainer = DefaultTrainer(cfg) 
 trainer.resume_or_load(resume=False)
 trainer.train()
-
-# cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "model_final.pth")
-# cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.03 
-# cfg.DATASETS.TEST = ("logo_test", )
-# predictor = DefaultPredictor(cfg)
-
-# dataset_dicts = get_logos('Flick/FlickrLogos-v2/trainset.txt')
-
-# for d in random.sample(dataset_dicts, 10):    
-#     im = cv2.imread(d["file_name"])
-#     outputs = predictor(im)
-#     v = Visualizer(im[:, :, ::-1],
-#                    metadata=logo_metadata, 
-#                    instance_mode=ColorMode.IMAGE_BW   # remove the colors of unsegmented pixels
-#     )
-#     out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-#     cv2.imwrite("output/%s.jpg" % str(d["file_name"][-8:-5]), out.get_image()[:, :, ::-1])
-    

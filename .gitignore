@@ -4,3 +4,9 @@ Flick/**
 .vscode
 scitas/**
 output/**
+Flicker1Class/**
+Flicker32Classes/**
+
+!Flicker1Class/*.py
+!Flicker32Classes/*.py
+

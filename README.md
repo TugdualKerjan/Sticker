@@ -157,60 +157,15 @@ pip install -U iopath==0.1.4 --user
 
 ## Week 5
 
-Trained detectron2 on FlickrLogos32, which has 32 classes, each a company.
+Used FlickrLogos32 to learn to custom dataset training.
 
-Detectron needs me to register a function that will return a list\[`dict`\] where the `dict` holds information about 1 specific image, then to register it into the datasets, which can then be passed to the __dataloader__ which will augment, batch and give to `model.forward()`
+| FlickrLogos32   |      1 Class      |  32 Classes |
+|:----------|:-------------:|:------:|
+| L 0.007 | [link]("Flicker1Classes/L0.005_900") | [link]("Flicker32Classes/L0.007_2000") |
+| L 0.005 | [link]("Flicker1Classes/L0.007_900") | [link]("Flicker32Classes/L0.005_2000") |
 
-After making my custom dataset and running it on SCITAS, it took around ~3h to get _some_ sort of result, obtaining 3-4% on random parts of the picture by running it through the detectron2 Visualiser class. I tried using multiple different backbones, from `C4`, `DC5`, `FPN` and `3x` or `1x` to see if it would make a difference. 
 
-Loss was at around `0.2` after ~15 minutes of training for an abysmal result. Results were slightly better for the classes version
-
-- [Video](https://www.youtube.com/watch?v=ElAVLYaVWgk) on custom microcontroller dataset
-
-<details close>
-<summary>Fields required for segmentation</summary>
-
-Items like `file_name`, `height`, `width`, `image_id` can be given by
-
-```python
-record = {}
-
-filename = os.path.join(img_dir, v["filename"])
-height, width = cv2.imread(filename).shape[:2]
-
-record["file_name"] = filename
-record["image_id"] = idx
-record["height"] = height
-record["width"] = width
-```
-
-#### Since we are doing image segmentation
-
-`annotations`, a list\[`dict`\] which contains `bbox`, `bbox_mode`, `category_id` and `segmentation` can be given by
-
-```python
-annos = v["regions"]
-objs = []
-for _, anno in annos.items():
-    assert not anno["region_attributes"]
-    anno = anno["shape_attributes"]
-    px = anno["all_points_x"]
-    py = anno["all_points_y"]
-    poly = [(x + 0.5, y + 0.5) for x, y in zip(px, py)]
-    poly = [p for x in poly for p in x]
-
-    obj = {
-        "bbox": [np.min(px), np.min(py), np.max(px), np.max(py)],
-        "bbox_mode": BoxMode.XYXY_ABS,
-        "segmentation": [poly],
-        "category_id": 0,
-    }
-    objs.append(obj)
-record["annotations"] = objs
-```
-
-</details>
-
+Detectron needs to register a `list`\[`dict`\], a list of metadata about each image. The __dataloader__ will then augment, batch and give to `model.forward()`
 
 ### Issues I ran into:
 <details close>
@@ -224,6 +179,12 @@ record["annotations"] = objs
 
 - Too much memory use for the C4 models
 
+- After making my custom dataset and running it on SCITAS, it took around ~3h to get _some_ sort of result,         obtaining 3-4% on random parts of the picture by running it through the detectron2 Visualiser class. I tried using multiple different backbones, from `C4`, `DC5`, `FPN` and `3x` or `1x` to see if it would make a difference. 
+
+    Loss was at around `0.2` after ~15 minutes of training for an **abysmal** result. Results were slightly better for the classes version
+
+    What solved the problem was changing the learning rate from 0.00025 to 0.02
+
 </details>
 
 ### What I learned:
@@ -234,6 +195,7 @@ record["annotations"] = objs
 
 - P a t i e n c e :stars:
 
+---
 
 # Works to cite:
 
