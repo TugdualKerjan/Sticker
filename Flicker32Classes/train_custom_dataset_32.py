@@ -89,8 +89,8 @@ cfg.DATASETS.TEST = () # Train with the logos dataset
 cfg.DATALOADER.NUM_WORKERS = 2
 cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(model)  # Let training initialize from model zoo
 cfg.SOLVER.IMS_PER_BATCH = 1
-cfg.SOLVER.BASE_LR = 0.005  # pick a good LR
-cfg.SOLVER.MAX_ITER = 2000
+cfg.SOLVER.BASE_LR = 0.001  # pick a good LR
+cfg.SOLVER.MAX_ITER = 4000
 # cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128   # faster, and good enough for this toy dataset (default: 512)
 cfg.MODEL.ROI_HEADS.NUM_CLASSES = len(classes)  # only has one class (ballon). (see https://detectron2.readthedocs.io/tutorials/datasets.html#update-the-config-for-new-datasets)
 

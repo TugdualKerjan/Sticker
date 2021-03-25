@@ -1,12 +1,16 @@
 detectron2/**
 PRIVATE.md
 Flick/**
+Flick47/**
+
 .vscode
 scitas/**
 output/**
 Flicker1Class/**
 Flicker32Classes/**
+Flicker1Class47/**
 
+!Flicker1Class47/*.py
 !Flicker1Class/*.py
 !Flicker32Classes/*.py
 

@@ -97,10 +97,45 @@ detected 15 instances in 0.65s
 
 ### Single Class Faster_rcnn_R_50_FPN_3x
 
+Used very low iter and LR
+
 ![](../images/output_1_faster_rcnn_R_50_FPN_3x.jpg)
 
 ### 32 Class Faster_rcnn_R_50_FPN_3x
 
+Used very low iter and LR
+
 ![](../images/output_32_faster_rcnn_R_50_FPN_3x.jpg)
+
+### Single Class Mask_rcnn_R_50_FPN_3x
+
+Used LR 0.005 iter 2000
+
+![](../images/output_1_mask_rcnn_R_50_FPN_3x.jpg)
+
+### 32 Class Mask_rcnn_R_50_FPN_3x
+
+Used LR 0.005 iter 2000
+
+![](../images/output_32_mask_rcnn_R_50_FPN_3x.jpg)
+
+### Single Class Mask_rcnn_R_50_FPN_3x
+
+Used LR 0.001 iter 4000
+
+![](../images/output_1_mask_rcnn_R_50_FPN_3x2.jpg)
+
+### 32 Class Mask_rcnn_R_50_FPN_3x
+
+Used LR 0.001 iter 4000
+
+![](../images/output_32_mask_rcnn_R_50_FPN_3x2.jpg)
+
+### 32 Class Mask_rcnn_R_50_FPN_3x Logo Test
+
+Used LR 0.001 iter 4000
+
+![](../images/output_1_mask_rcnn_R_50_FPN_3x_sticker.jpg)
+
 
 </details>

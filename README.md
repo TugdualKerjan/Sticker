@@ -161,8 +161,9 @@ Used FlickrLogos32 to learn to custom dataset training.
 
 | FlickrLogos32   |      1 Class      |  32 Classes |
 |:----------|:-------------:|:------:|
-| L 0.007 | [link]("Flicker1Classes/L0.005_900") | [link]("Flicker32Classes/L0.007_2000") |
-| L 0.005 | [link]("Flicker1Classes/L0.007_900") | [link]("Flicker32Classes/L0.005_2000") |
+| L 0.007 | [link]("Flicker1Classes/L0.007_900") | [link]("Flicker32Classes/L0.007_900") |
+| L 0.005 | [link]("Flicker1Classes/L0.005_2000") | [link]("Flicker32Classes/L0.005_2000") |
+| L 0.001 | [link]("Flicker1Classes/L0.001_4000") | [link]("Flicker32Classes/L0.001_4000") |
 
 
 Detectron needs to register a `list`\[`dict`\], a list of metadata about each image. The __dataloader__ will then augment, batch and give to `model.forward()`
@@ -194,6 +195,26 @@ Detectron needs to register a `list`\[`dict`\], a list of metadata about each im
 - How to use `rsync`
 
 - P a t i e n c e :stars:
+
+---
+
+## Week 5 Part 2
+
+- Built a python bot that cuts out people from pictures that are submitted to it, you can try it out here: https://t.me/faststicker_bot
+
+    - Hosted on heroku, took ~10h to do. Learned a lot about git, heroku and python dependencies.
+
+- Tried out the Flicker1Class47 dataset
+
+---
+
+## Week 6
+
+- Label stickers, maybe just the box to then attempt to classify them [link](https://github.com/wkentaro/labelme)
+
+- Look around for the precision and curve, as well as IOU.
+
+- 
 
 ---
 

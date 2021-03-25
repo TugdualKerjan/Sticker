@@ -80,14 +80,16 @@ predictor = DefaultPredictor(cfg)
 os.makedirs("guess", exist_ok=True)
 
 import glob
-for imageName in random.sample(glob.glob('../Flick/FlickrLogos-v2/classes/jpg/*/*.jpg'), 30):
+for imageName in glob.glob('../poly.jpg'):
+
+# for imageName in random.sample(glob.glob('../Flick/FlickrLogos-v2/classes/jpg/*/*.jpg'), 30):
     im = cv2.imread(imageName)
     outputs = predictor(im)
     v = Visualizer(im[:, :, ::-1],
                     metadata=logo_metadata, 
                     )
     out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-    cv2.imwrite("guess/%s.jpg" % str(imageName[-8:-5]), out.get_image()[:, :, ::-1])
+    cv2.imwrite("guess/%s.jpg" % str(imageName[-10:-3]), out.get_image()[:, :, ::-1])
 
 # dataset_dicts = get_logos('../Flick/FlickrLogos-v2/testset.txt')
 
