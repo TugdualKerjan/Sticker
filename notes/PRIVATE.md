@@ -1,0 +1,4 @@
+- FlickrLogos-32: http://bit.ly/FlickrLogos32v2
+- FlickrLogos-32-Eval-Kit: http://bit.ly/FlickrLogos32EvalKit
+- Flickrlogos-47: http://bit.ly/FlickrLogos_47
+- Description & Citation: http://bit.ly/FlickrLogosWebsite

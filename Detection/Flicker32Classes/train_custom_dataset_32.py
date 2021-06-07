@@ -85,6 +85,7 @@ cfg.merge_from_file(model_zoo.get_config_file(model))
 cfg.INPUT.MASK_FORMAT = 'bitmask'
 cfg.DATASETS.TRAIN = ("logo_train",) # Train with the logos dataset
 cfg.DATASETS.TEST = () # Train with the logos dataset
+# cfg.MODEL.DEVICE = "cpu"
 
 cfg.DATALOADER.NUM_WORKERS = 2
 cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(model)  # Let training initialize from model zoo

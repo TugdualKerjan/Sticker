@@ -218,9 +218,105 @@ Detectron needs to register a `list`\[`dict`\], a list of metadata about each im
 
 ---
 
+## Week 10
+
+Time to classify the stickers using Few Shot Image Classification. There are three pillars in this domain:
+
+- Prior knowledge about Similarity (Knows how to differitiate well)
+
+- Prior knowledge about Learning (Knows how to adapt well)
+
+- Prior knowledge about the data (Augment data to learn)
+
+Detectron2 only needs 10 images per class in the training to start recognizing logos.
+
+I chose to go with similarity implementations, specifically Matching Networks, which are basically KNNs with extra steps.
+
+**Lots of random research and looking at random indians on youtube**
+
+---
+
+## Week 11
+
+I decided to go with [Oscar's implementation in python](https://github.com/oscarknagg/few-shot)
+
+In which he highlights how to implement the Matching Networks in Python using PyTorch
+
+### Issues I ran into:
+<details close>
+<summary></summary>
+
+- Issue following instructions of the git repo, but after downloading the miniImageNet dataset and setting it up all good
+
+- Had to change the pythonpath for it to have access to the local files config.py
+
+```
+export PYTHONPATH=.
+```
+
+- After uploading all the files to the SCITAS cluster, I simply created a new environment with venv and installed all the libraries (Was missing Scikit, not sure why)
+
+- Basically roasting my computer 3 times trying to load the files of the datasets (Unzip)
+
+- The program that I downloaded uses q queries * k classes across the k classes when I simply want to be able to ask for a single image (Instead of k ones) Because of this I had to rewrite part of the program, and manage to make it run on the SCITAS servers.
+
+- Running the miniImageNet dataset is a pain because it is much more complex than the omniglot one. (Omniglot takes ~10min to run compared to the 2h of the miniImageNet one)
+
+</details>
+
+### Adding the option to run on one image:
+<details close>
+<summary></summary>
+
+- Change core.py so that the NShotTaskSampler takes the first sample instead of k.
+
+- Change core.py so that the create_nshot_task_label generates a target label of [0]
+
+- Create tugdual.py which loads the dataset and prepares a n_shot_task with a batch so we can check 
+
+</details>
+
+
+### What I learned:
+
+- How to read instructions :P
+
+- Simple use of requirements.txt
+
+- Metric Learning: Find encoding space in which classes are grouped together and far apart from one another. 
+    - Original concept was with Siamese networks (CNN Enconder to get feature embeddings) and then compare using any energy function (Cosine, Euclidean distance). If below a certain threshold then the images belong to the same class.
+
+    - Prototypical networks take it a step further by encoding the n-shots of each class into a prototype, a.k.a. the mean of the encodings. Distance function is used to calculate distance and then a softmax to obtain the probabilities of the query image belonging to a class.
+
+- "Omniglot [16] is a dataset of 1623 handwritten characters collected from 50 alphabets. There are 20examples associated with each character, where each example is drawn by a different human subject.We follow the procedure of Vinyals et al.[29]by resizing the grayscale images to 28×28 andaugmenting the character classes with rotations in multiples of 90 degrees" - Proto. type
+
+--- 
+
+## Week 14
+
+Wrote tugdual.py which is a python script to test with 1 image the Prototypical networks!
+
+
+
+### Issues I ran into:
+<details close>
+<summary></summary>
+
+
+</details>
+
+
+### What I learned:
+
+- 
+
+---
+
 # Works to cite:
 
 Scalable Logo Recognition in Real-World Images
 Stefan Romberg, Lluis Garcia Pueyo, Rainer Lienhart, Roelof van Zwol
 ACM International Conference on Multimedia Retrieval 2011 (ICMR11), Trento, April 2011. 
 
+
+Vinyals, Oriol, et al. "Matching networks for one shot learning." arXiv preprint arXiv:1606.04080 (2016).

@@ -1,0 +1,5 @@
+{
+    "python.pythonPath": "/home/tugdual/anaconda3/envs/myenv/bin/python",
+    "git.ignoreLimitWarning": true,
+    "python.formatting.provider": "autopep8"
+}
